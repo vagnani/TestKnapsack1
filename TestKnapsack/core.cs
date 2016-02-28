@@ -11,11 +11,17 @@ namespace MyLibrary.Collections
     {
         internal List<Element> _elements;
         internal List<List<Element>> _listMax;
+        public string StringRappresentation { get; }
 
         private Knapsack() { }
-        public Knapsack(List<Element> elements)
+        public Knapsack(List<Element> elements) : this()
         {
             _elements = elements;
+        }
+        public Knapsack(string str) 
+        {
+            StringRappresentation = str;
+            _elements = AddString(str);
         }
 
         public Element TheHighest(int number, int maxWeight)
@@ -26,10 +32,10 @@ namespace MyLibrary.Collections
             foreach (var item in _elements)
             {
                 _listMax.Add(new List<Element>() { item });
-                SetAll(new List<Element>() { item }, number, _listMax.Count-1);
+                SetAll(new List<Element>() { item }, number, _listMax.Count - 1);
             }
 
-            FilterDouble();
+            //FilterDouble(); <-- per controllare tra i doppioni:inutile
 
             foreach (var list in _listMax)
             {
@@ -51,12 +57,6 @@ namespace MyLibrary.Collections
             return itemNotOverMaxWeight[itemNotOverMaxWeight.Count - 1];
         }
 
-        private void FilterDouble()
-        {
-            //throw new NotImplementedException();
-        }
-
-        //private void SetAll(Coordinate _first, List<Coordinate> locked, int index)
         private void SetAll(List<Element> locked, int number, int index)
         {
             var copyListMax = CopyFrom(_listMax[index]);
@@ -90,96 +90,54 @@ namespace MyLibrary.Collections
             return result;
         }
 
-        #region add string
+        private List<Element> AddString(string str)
+        {
+            char excluded1 = '(';
+            char excluded2 = ')';
+            char excluded3 = ',';
+            List<List<string>> all = new List<List<string>>();
+            List<Element> finalAll = new List<Element>();
 
-        //public void AddString(string str)
-        //{
-        //    str.Trim();
-
-        //    char excluded1 = '(';
-        //    char excluded2 = ')';
-        //    char excluded3 = ',';
-
-        //    List<List<string>> all = new List<List<string>>();
-
-        //    for (int index = 0; index < str.Count(); index++)
-        //    {
-        //        List<string> temp = new List<string>();
-
-        //        //if (str[index] == excluded1)                
-        //        string name = "";
-        //        for (; index <= str.Count(); index++)
-        //        {
-        //            if (str[index] != excluded1 && str[index] != excluded2 && str[index] != excluded3) //exception
-        //            {
-        //                name += str[index];
-        //            }
-
-        //            if (str[index] == excluded3)
-        //            {
-        //                temp.Add(name);
-        //                name = "";
-        //            }
-
-        //            if (str[index] == excluded2)
-        //            {
-        //                temp.Add(name);
-        //                break;
-        //            }
-        //        }
-
-        //        all.Add(temp);
-        //    }
-
-        //    List<string> mustContain = new List<string>() { _first.name };
-        //    int countDone = 0;
-        //    //int indexMust = 0;
+            str.Trim();
 
 
-        //    //to see again the function of islock, i mean when i must lock the iterazione
-        //    for (int indexMust = 0; countDone < all.Count; indexMust++)
-        //    {
-        //        List<List<string>> rightToAdd = new List<List<string>>();
+            for (int index = 0; index < str.Count(); index++)
+            {
+                List<string> temp = new List<string>();
 
-        //        foreach (var list in all)
-        //        {
-        //            if (list[0] == mustContain[indexMust])
-        //            {
-        //                rightToAdd.Add(list);
-        //            }
-        //        }
+                //if (str[index] == excluded1)                
+                string name = "";
+                for (; index <= str.Count(); index++)
+                {
+                    if (str[index] != excluded1 && str[index] != excluded2 && str[index] != excluded3) //exception
+                    {
+                        name += str[index];
+                    }
 
-        //        if (rightToAdd.Count > 0)
-        //        {
-        //            foreach (var list in rightToAdd)
-        //            {
-        //                SetAllNodeString();
+                    if (str[index] == excluded3)
+                    {
+                        temp.Add(name);
+                        name = "";
+                    }
 
-        //                //if(_allNodeString.Contains(list[0]))
-        //                int indexFather = _allNodeString.FindIndex(x => x == list[0]);
+                    if (str[index] == excluded2)
+                    {
+                        temp.Add(name);
+                        break;
+                    }
+                }
 
-        //                if (_allNodeString.Contains(list[1]))
-        //                {
-        //                    int indexSon = _allNodeString.FindIndex(x => x == list[1]);
-        //                    AddAfter(_allNode[indexFather], _allNode[indexSon]);
-        //                    _allNode[indexFather].value.Add(list[1], Convert.ToInt32(list[2]));
-        //                    mustContain.Add(list[1]);
-        //                    countDone++;
-        //                }
-        //                else
-        //                {
-        //                    var node = new MyLinkedListNode(list[1], new Dictionary<string, int>());
-        //                    //check if it is added to _allNode
-        //                    AddAfter(_allNode[indexFather], node);
-        //                    _allNode[indexFather].value.Add(list[1], Convert.ToInt32(list[2]));
-        //                    mustContain.Add(list[1]);
-        //                    countDone++;
-        //                }
-        //            }
-        //        }
-        //    }
-        //}           
-        #endregion
+                all.Add(temp);
+            }
+
+            foreach (var item in all)
+            {
+                int value = Convert.ToInt32(item[1]);
+                int weight = Convert.ToInt32(item[2]);
+                finalAll.Add(new Element(item[0], value, weight));
+            }
+            return finalAll;
+        }
     }
 
     public struct Element
@@ -195,6 +153,7 @@ namespace MyLibrary.Collections
             this._weight = weight;
         }
 
+        #region override
         public override bool Equals(object obj1)
         {
             var obj = (Element)obj1;
@@ -204,8 +163,9 @@ namespace MyLibrary.Collections
         {
             return $"[nomi={_name}, valore={_value}, peso={_weight}]";
         }
+        #endregion
 
-        #region operatori (da definire)
+        #region operatori 
         public static bool operator ==(Element ele1, Element ele2)
         {
             return false;
@@ -222,7 +182,7 @@ namespace MyLibrary.Collections
         public static Element operator -(Element item1, Element item2)
         {
             return new Element("(" + item1._name + "-" + item2._name + ")", item1._value - item2._value, item2._weight - item1._weight);
-        }
+        } //inutile
         #endregion
     }
 }

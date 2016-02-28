@@ -11,19 +11,25 @@ namespace TestKnapsack
     {
         static void Main()
         {
-            List<Element> elements = new List<Element>()
+            Console.Write("Risoluzione problema knapsack");
+            Console.WriteLine("inserire elementi con il seguente formalismo");
+            Console.WriteLine("(nome,valore,peso) <==le parentesi obbligatorie");
+            Knapsack bag = new Knapsack(Console.ReadLine());
+
+            bool isStop = false;
+            do
             {
-                new Element("n1",50,40),
-                new Element("n2",55,50),
-                new Element("n3",10,35),
-                new Element("n4",40,10),
-                new Element("n5",50,40),
-            };
+                Console.WriteLine("Numero di elementi della lista finale");
+                int number = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine("Peso massimo");
+                int maxWeight = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine(bag.TheHighest(number: number, maxWeight: maxWeight));
+                Console.ReadKey();
 
-            Knapsack bag = new Knapsack(elements);
-
-            Console.WriteLine(bag.TheHighest(2, 80));
-            Console.ReadKey();
+                Console.WriteLine("Vuoi trovare un'altra lista, si o no?");
+                if (Console.ReadLine() == "no")
+                    isStop = true;                
+            } while (!isStop);
         }
     }
 }
