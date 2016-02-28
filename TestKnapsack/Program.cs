@@ -14,7 +14,8 @@ namespace TestKnapsack
             Console.Write("Risoluzione problema knapsack");
             Console.WriteLine("inserire elementi con il seguente formalismo");
             Console.WriteLine("(nome,valore,peso) <==le parentesi obbligatorie");
-            Knapsack bag = new Knapsack(Console.ReadLine());
+            Console.WriteLine();
+            Knapsack bag = new Knapsack(Console.ReadLine());            
 
             bool isStop = false;
             do
@@ -23,6 +24,7 @@ namespace TestKnapsack
                 int number = Convert.ToInt32(Console.ReadLine());
                 Console.WriteLine("Peso massimo");
                 int maxWeight = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine();
                 Console.WriteLine(bag.TheHighest(number: number, maxWeight: maxWeight));
                 Console.ReadKey();
 
