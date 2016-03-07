@@ -52,6 +52,11 @@ namespace MyLibrary.Collections
                 }
             }
 
+            if(itemNotOverMaxWeight.Count<1)
+            {
+                return new Element("lista non trovata", 0, 0);
+            }
+
             itemNotOverMaxWeight.Sort((x, y) => x._value.CompareTo(y._value));
 
             return itemNotOverMaxWeight[itemNotOverMaxWeight.Count - 1];
@@ -61,10 +66,11 @@ namespace MyLibrary.Collections
         {
             var copyListMax = CopyFrom(_listMax[index]);
             int copyIndex = index;
+            int countList = _listMax[index].Count;
 
             foreach (var item in _elements)
             {
-                if (_listMax[copyIndex].Count < number && !locked.Contains(item))
+                if (countList < number && !locked.Contains(item))
                 {
                     List<Element> copyLocked = CopyFrom(locked);
                     if (copyIndex != index)
