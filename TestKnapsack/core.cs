@@ -82,7 +82,7 @@ namespace MyLibrary.Collections
                     _listMax[copyIndex].Add(item);
                     copyLocked.Add(item);
                     SetAll(copyLocked, number, copyIndex);
-                    index++;
+                    index=-1;
                 }
             }
         }
